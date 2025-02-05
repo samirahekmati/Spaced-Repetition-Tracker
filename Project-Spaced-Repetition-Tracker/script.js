@@ -41,6 +41,19 @@ function formData(userId){ // getting data from form and add them to local stora
   let buttonForm = document.querySelector("#form-button");
   
   buttonForm.onclick = function(event) { // Overwrites previous event listener
+
+ //Fix form submission to handle empty input fields and display error message
+    let formTopicValue = formTopic.value;
+    let dateFormValue = dateForm.value;
+
+    if (formTopicValue === "" || dateFormValue === "") {
+        // Show message if either field is empty
+        alert("Input field is empty");
+        event.preventDefault(); // Prevent form submission
+        return;
+    }
+
+    
     let dataForm = {
         topic: formTopic.value,
         date: dateForm.value
