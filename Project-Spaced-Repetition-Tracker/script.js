@@ -54,49 +54,21 @@ function createDropDown(users) {
   })
 }
 
-// function formData(userId){ // getting data from form and add them to local storage
-  
-//   let formTopic = document.querySelector("#topic-form");
-//   let dateForm = document.querySelector("#date-form");
-//   let buttonForm = document.querySelector("#form-button");
-  
-//   buttonForm.onclick = function(event) { // Overwrites previous event listener
 
-//  //Fix form submission to handle empty input fields and display error message
-//     let formTopicValue = formTopic.value;
-//     let dateFormValue = dateForm.value;
-
-//     if (formTopicValue === "" || dateFormValue === "") {
-//         // Show message if either field is empty
-//         alert("Input field is empty");
-//         event.preventDefault(); // Prevent form submission
-//         return;
-//     }
-
-    
-//     let dataForm = {
-//         topic: formTopic.value,
-//         date: dateForm.value
-//     };
-//     console.log(dataForm);
-
-//     addData(userId, dataForm);
-// };
-
-// }
-
-function formData(userId) {  
+function formData(userId) {  // getting data from form and add them to local storage
   let formTopic = document.querySelector("#topic-form");  
   let dateForm = document.querySelector("#date-form");  
   let buttonForm = document.querySelector("#form-button");  
 
-  buttonForm.onclick = function (event) {  
+  buttonForm.onclick = function (event) { // Overwrites previous event listener
+   //Fix form submission to handle empty input fields and display error message 
     let formTopicValue = formTopic.value;  
     let dateFormValue = dateForm.value;  
 
     if (formTopicValue === "" || dateFormValue === "") {  
+      // Show message if either field is empty
       alert("Input field is empty");  
-      event.preventDefault();  
+      event.preventDefault();  // Prevent form submission
       return;  
     }  
 
@@ -187,7 +159,6 @@ window.onload = function () {
   createDropDown(users);
   hideForm();
   setTodayDate();
-  console.log(getData(users[1]));
 };
 
 
