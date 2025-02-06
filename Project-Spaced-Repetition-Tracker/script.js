@@ -54,36 +54,73 @@ function createDropDown(users) {
   })
 }
 
-function formData(userId){ // getting data from form and add them to local storage
+// function formData(userId){ // getting data from form and add them to local storage
   
-  let formTopic = document.querySelector("#topic-form");
-  let dateForm = document.querySelector("#date-form");
-  let buttonForm = document.querySelector("#form-button");
+//   let formTopic = document.querySelector("#topic-form");
+//   let dateForm = document.querySelector("#date-form");
+//   let buttonForm = document.querySelector("#form-button");
   
-  buttonForm.onclick = function(event) { // Overwrites previous event listener
+//   buttonForm.onclick = function(event) { // Overwrites previous event listener
 
- //Fix form submission to handle empty input fields and display error message
-    let formTopicValue = formTopic.value;
-    let dateFormValue = dateForm.value;
+//  //Fix form submission to handle empty input fields and display error message
+//     let formTopicValue = formTopic.value;
+//     let dateFormValue = dateForm.value;
 
-    if (formTopicValue === "" || dateFormValue === "") {
-        // Show message if either field is empty
-        alert("Input field is empty");
-        event.preventDefault(); // Prevent form submission
-        return;
-    }
+//     if (formTopicValue === "" || dateFormValue === "") {
+//         // Show message if either field is empty
+//         alert("Input field is empty");
+//         event.preventDefault(); // Prevent form submission
+//         return;
+//     }
 
     
-    let dataForm = {
-        topic: formTopic.value,
-        date: dateForm.value
-    };
-    console.log(dataForm);
+//     let dataForm = {
+//         topic: formTopic.value,
+//         date: dateForm.value
+//     };
+//     console.log(dataForm);
 
-    addData(userId, dataForm);
-};
+//     addData(userId, dataForm);
+// };
 
-}
+// }
+
+function formData(userId) {  
+  let formTopic = document.querySelector("#topic-form");  
+  let dateForm = document.querySelector("#date-form");  
+  let buttonForm = document.querySelector("#form-button");  
+
+  buttonForm.onclick = function (event) {  
+    let formTopicValue = formTopic.value;  
+    let dateFormValue = dateForm.value;  
+
+    if (formTopicValue === "" || dateFormValue === "") {  
+      alert("Input field is empty");  
+      event.preventDefault();  
+      return;  
+    }  
+
+    let selectedDate = new Date(dateFormValue);  
+
+    // Generate revision dates  
+    let revisionDates = [  
+      new Date(selectedDate.getTime() + 7 * 24 * 60 * 60 * 1000), // +1 week  
+      new Date(selectedDate.setMonth(selectedDate.getMonth() + 1)), // +1 month  
+      new Date(selectedDate.setMonth(selectedDate.getMonth() + 2)), // +3 months  
+      new Date(selectedDate.setMonth(selectedDate.getMonth() + 3)), // +6 months  
+      new Date(selectedDate.setFullYear(selectedDate.getFullYear() + 1)) // +1 year  
+    ];  
+
+    let dataForm = revisionDates.map(date => ({  
+      topic: formTopicValue,  
+      date: date.toISOString().split('T')[0] // Store in "YYYY-MM-DD" format  
+    }));  
+
+    dataForm.forEach(entry => addData(userId, entry));  
+
+    displayAgendas(userId, getData(userId)); // Update UI  
+  };  
+}  
 
 function displayAgendas(userId, gettingData1) {
   let ulAgendas = document.querySelector("#agenda");
