@@ -9,7 +9,7 @@ import { getUserIds, getData, addData, clearData} from "./storage.js";
 
 let formInput = document.querySelector("#form-input");
 
-
+// hides form input section initially
 function hideForm() {
   let formInput = document.querySelector("#form-input");
   if (formInput) {
@@ -17,6 +17,7 @@ function hideForm() {
   }
 }
 
+//sets the date input field to today's date
 function setTodayDate() {
   const dateInput = document.querySelector("#date-form");
   if (dateInput) {
@@ -30,31 +31,33 @@ function setTodayDate() {
 }
 
 
-//creating the dropdown for 5 users
+//retrive user Ids from storage
 const users = getUserIds();
 
-
+// created a dropdown menu with user options. when a user is selected, the form is displayed, and their data is loade 
 function createDropDown(users) {
   let dropdownSelect = document.querySelector("#dropdown");
+  //populate the dropdown with user options
   for (let i = 0; i < users.length; i++) {
     let option = document.createElement("option");
     option.id = i + 1;
     option.innerHTML = `User ${users[i]}`;
     dropdownSelect.appendChild(option);
   }
+  // event listener for dropdown selection
   dropdownSelect.addEventListener("change", ()=>{
-    formInput.style.display = "block"; // Show form
+    formInput.style.display = "block"; // Show form when a user is selected
     let selectedOption = dropdownSelect.options[dropdownSelect.selectedIndex];
     let userId = selectedOption.id;
     console.log(userId);
-    formData(userId);
+    formData(userId); // Prepare the form for input
     let gettingData = getData(userId);
     console.log(gettingData);
     displayAgendas(userId, gettingData);
   })
 }
 
-
+//handles form submision to add topics and revision dates
 function formData(userId) {  // getting data from form and add them to local storage
   let formTopic = document.querySelector("#topic-form");  
   let dateForm = document.querySelector("#date-form");  
@@ -94,33 +97,7 @@ function formData(userId) {  // getting data from form and add them to local sto
   };  
 }  
 
-// function displayAgendas(userId, gettingData1) {
-//   let ulAgendas = document.querySelector("#agenda");
-//   ulAgendas.innerHTML = ""; // Clear previous content
-
-//   if (!gettingData1 || gettingData1.length === 0) {
-//     ulAgendas.innerHTML = "<p>No upcoming agenda for this user.</p>";
-//   }
-  
-//   // Sort the gettingData array by date
-//   let gettingData = gettingData1.sort((a, b) => {
-//     // Convert date strings into Date objects for comparison
-//     let dateA = new Date(a.date);
-//     let dateB = new Date(b.date);
-
-//     // Sort in ascending order: Date A comes before Date B
-//     return dateA - dateB;  // If dateA < dateB, result is negative, meaning a comes first
-//   });
-//   // Create a list of upcoming topics
-  
-//   for(let i of gettingData){
-//     let liElement = document.createElement("li");
-//     liElement.innerHTML = `${i.topic}, ${formatDate(userId, i.date)}`
-//     ulAgendas.appendChild(liElement);
-//   }
-
-// }
-
+//displays agenda for selected users.
 function displayAgendas(userId, gettingData1) {
   let ulAgendas = document.querySelector("#agenda");
   ulAgendas.innerHTML = ""; // Clear previous content
@@ -133,12 +110,12 @@ function displayAgendas(userId, gettingData1) {
   let today = new Date();
   today.setHours(0, 0, 0, 0); // Normalize time to avoid issues
 
-  // Filter out past dates
+  // filter out past dates and sort remaining ones
   let gettingData = gettingData1
     .map(item => ({ ...item, date: new Date(item.date) }))
     .filter(item => item.date >= today) // Keep only today's and future dates
     .sort((a, b) => a.date - b.date); // Sort in ascending order
-
+  //display a message if no upcoming dates
   if (gettingData.length === 0) {
     ulAgendas.innerHTML = "<p>No upcoming agenda for this user.</p>";
     return;
@@ -162,15 +139,15 @@ function formatDate(userId, date){
   : (dateArr[2] == "03" || dateArr[2] == "23") 
   ? `${dateArr[2]}rd`
   : `${dateArr[2]}th`; // fixing st nd rd th for days
-
+  // convert month number to month name
   let month = (dateArr[1] == "01") ? "January" : (dateArr[1] == "02") ? "February" : (dateArr[1] == "03") ? "March"
   : (dateArr[1] == "04") ? "April" : (dateArr[1] == "05") ? "May" : (dateArr[1] == "06") ? "June" : (dateArr[1] == "07") ? "July"
   : (dateArr[1] == "08") ? "August" : (dateArr[1] == "09") ? "September" : (dateArr[1] == "10") ? "October"
   : (dateArr[1] == "11") ? "November" : "December";  // months names
 
-   let year = dateArr[0];
+   let year = dateArr[0]; //extract year
   
-     const formattedDate = `${day} ${month} ${year}`;
+     const formattedDate = `${day} ${month} ${year}`; //return formatted date
      return formattedDate;
   
   
