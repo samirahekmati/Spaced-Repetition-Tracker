@@ -94,30 +94,62 @@ function formData(userId) {  // getting data from form and add them to local sto
   };  
 }  
 
+// function displayAgendas(userId, gettingData1) {
+//   let ulAgendas = document.querySelector("#agenda");
+//   ulAgendas.innerHTML = ""; // Clear previous content
+
+//   if (!gettingData1 || gettingData1.length === 0) {
+//     ulAgendas.innerHTML = "<p>No upcoming agenda for this user.</p>";
+//   }
+  
+//   // Sort the gettingData array by date
+//   let gettingData = gettingData1.sort((a, b) => {
+//     // Convert date strings into Date objects for comparison
+//     let dateA = new Date(a.date);
+//     let dateB = new Date(b.date);
+
+//     // Sort in ascending order: Date A comes before Date B
+//     return dateA - dateB;  // If dateA < dateB, result is negative, meaning a comes first
+//   });
+//   // Create a list of upcoming topics
+  
+//   for(let i of gettingData){
+//     let liElement = document.createElement("li");
+//     liElement.innerHTML = `${i.topic}, ${formatDate(userId, i.date)}`
+//     ulAgendas.appendChild(liElement);
+//   }
+
+// }
+
 function displayAgendas(userId, gettingData1) {
   let ulAgendas = document.querySelector("#agenda");
   ulAgendas.innerHTML = ""; // Clear previous content
 
   if (!gettingData1 || gettingData1.length === 0) {
     ulAgendas.innerHTML = "<p>No upcoming agenda for this user.</p>";
+    return;
   }
-  // Sort the gettingData array by date
-  let gettingData = gettingData1.sort((a, b) => {
-    // Convert date strings into Date objects for comparison
-    let dateA = new Date(a.date);
-    let dateB = new Date(b.date);
 
-    // Sort in ascending order: Date A comes before Date B
-    return dateA - dateB;  // If dateA < dateB, result is negative, meaning a comes first
-  });
+  let today = new Date();
+  today.setHours(0, 0, 0, 0); // Normalize time to avoid issues
+
+  // Filter out past dates
+  let gettingData = gettingData1
+    .map(item => ({ ...item, date: new Date(item.date) }))
+    .filter(item => item.date >= today) // Keep only today's and future dates
+    .sort((a, b) => a.date - b.date); // Sort in ascending order
+
+  if (gettingData.length === 0) {
+    ulAgendas.innerHTML = "<p>No upcoming agenda for this user.</p>";
+    return;
+  }
+
   // Create a list of upcoming topics
-  
-  for(let i of gettingData){
+  for (let i of gettingData) {
     let liElement = document.createElement("li");
-    liElement.innerHTML = `${i.topic}, ${formatDate(userId, i.date)}`
+    liElement.innerHTML = `${i.topic}, ${formatDate(userId, i.date.toISOString().split('T')[0])}`;
     ulAgendas.appendChild(liElement);
   }
-
 }
 
 
