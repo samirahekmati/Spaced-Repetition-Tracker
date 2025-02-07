@@ -102,13 +102,13 @@ function formData(userId) {
 
     let selectedDate = new Date(dateFormValue);  
 
-    // Generate revision dates  
+    // Generate revision dates correctly  
     let revisionDates = [  
       new Date(selectedDate.getTime() + 7 * 24 * 60 * 60 * 1000), // +1 week  
-      new Date(selectedDate.setMonth(selectedDate.getMonth() + 1)), // +1 month  
-      new Date(selectedDate.setMonth(selectedDate.getMonth() + 2)), // +3 months  
-      new Date(selectedDate.setMonth(selectedDate.getMonth() + 3)), // +6 months  
-      new Date(selectedDate.setFullYear(selectedDate.getFullYear() + 1)) // +1 year  
+      new Date(new Date(selectedDate).setMonth(selectedDate.getMonth() + 1)), // +1 month  
+      new Date(new Date(selectedDate).setMonth(selectedDate.getMonth() + 3)), // +3 months  
+      new Date(new Date(selectedDate).setMonth(selectedDate.getMonth() + 6)), // +6 months  
+      new Date(new Date(selectedDate).setFullYear(selectedDate.getFullYear() + 1)) // +1 year  
     ];  
 
     let dataForm = revisionDates.map(date => ({  
